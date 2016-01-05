@@ -1,4 +1,6 @@
 import {Component} from 'angular2/core';
+import {Programmer} from './programmer'
+import {ProgrammerDetailComponent} from './programmer-detail.component'
 
 var PROGRAMMERS: Programmer[] = [
 	{ "id": 11, name: "Alice" },
@@ -15,6 +17,7 @@ var PROGRAMMERS: Programmer[] = [
 
 @Component({
 	selector: 'app-root',
+	directives: [ProgrammerDetailComponent],
 	template: `
 	<h1>{{title}}</h1>
 	<h2>Programmers</h2>
@@ -25,14 +28,7 @@ var PROGRAMMERS: Programmer[] = [
 	    <span class="badge">{{programmer.id}}</span> {{ programmer.name }}
 	  </li>
 	</ul>
-	<div *ngIf="selectedProgrammer">
-	  <h2>{{selectedProgrammer.name}} details</h2>
-	  <div><label>id: </label>{{selectedProgrammer.id}}</div>
-	  <div>
-	    <label>name: </label>
-	    <input [(ngModel)]="selectedProgrammer.name" placeholder="name"/>
-	  </div>
-	</div>
+	<programmer-detail [programmer]="selectedProgrammer"></programmer-detail>
 	`,
 	styles: [`
 	  .selected {
@@ -95,9 +91,4 @@ export class AppComponent {
 	onSelect(programmer: Programmer) {
 		this.selectedProgrammer = programmer;
 	}
-}
-
-interface Programmer {
-	id: number;
-	name: string;
 }
