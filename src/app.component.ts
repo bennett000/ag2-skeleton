@@ -1,19 +1,10 @@
 import {Component} from 'angular2/core';
-import {Programmer} from './programmer'
-import {ProgrammerDetailComponent} from './programmer-detail.component'
+import {OnInit} from 'angular2/core';
+import {Programmer} from './programmer';
+import {ProgrammerDetailComponent} from './programmer-detail.component';
+import {ProgrammerService} from './programmer.service';
+import {PROGRAMMERS} from "./mock-programmers";
 
-var PROGRAMMERS: Programmer[] = [
-	{ "id": 11, name: "Alice" },
-	{ "id": 12, name: "Betty" },
-	{ "id": 13, name: "Cat" },
-	{ "id": 14, name: "Dora" },
-	{ "id": 15, name: "Emily" },
-	{ "id": 16, name: "Farah" },
-	{ "id": 17, name: "George" },
-	{ "id": 18, name: "Hannah" },
-	{ "id": 19, name: "Ingrid" },
-	{ "id": 20, name: "Joy" },
-];
 
 @Component({
 	selector: 'app-root',
@@ -77,17 +68,27 @@ var PROGRAMMERS: Programmer[] = [
 	    margin-right: 0.8em;
 	    border-radius: 4px 0px 0px 4px;
 	  }
-	`]
+	`],
+	providers: [ProgrammerService]
 })
-
-export class AppComponent {
+export class AppComponent implements OnInit {
+	constructor(private _programmerService: ProgrammerService) {
+	}
+	ngOnInit() {
+		this.getProgrammers();
+	}
+	public getProgrammers() {
+		this
+			._programmerService.getProgrammers()
+			.then((programmers) => this.programmers = programmers);
+	}
 	public title = 'Tour of Programmers';
 	public programmer:Programmer = {
 		id: 1,
 		name: 'Rich'
 	};
 	public selectedProgrammer: Programmer;
-	public programmers = PROGRAMMERS;
+	public programmers: Programmer[];
 	onSelect(programmer: Programmer) {
 		this.selectedProgrammer = programmer;
 	}
